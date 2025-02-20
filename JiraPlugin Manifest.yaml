@@ -1,0 +1,115 @@
+openapi: 3.0.0
+
+info:
+  title: Atlassian Jira Software Cloud API
+  description: >
+    API for interacting with Atlassian Jira Software Cloud.
+    Use this API to retrieve and update issues, list projects, and perform other Jira operations.
+    #ExamplePrompts Retrieve issue details from Jira
+    #ExamplePrompts List all projects in Jira
+    #ExamplePrompts Update an issue in Jira
+  version: "1.0.0"
+
+servers:
+  # Replace 'mycompany.atlassian.net' with your actual Jira Cloud instance domain.
+  - url: https://mycompany.atlassian.net
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+security:
+  - basicAuth: []
+
+paths:
+  /rest/api/3/issue/{issueIdOrKey}:
+    get:
+      summary: Retrieve an Issue
+      description: Retrieve detailed information about a specific issue by its ID or key.
+      operationId: getIssue
+      parameters:
+        - in: path
+          name: issueIdOrKey
+          required: true
+          schema:
+            type: string
+          description: The ID or key of the issue to retrieve.
+      responses:
+        '200':
+          description: Issue details successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  key:
+                    type: string
+                  fields:
+                    type: object
+                    description: Contains issue fields such as summary, description, status, etc.
+        '404':
+          description: Issue not found.
+        '401':
+          description: Unauthorized – Check your credentials.
+    put:
+      summary: Update an Issue
+      description: Update fields for a specific issue by its ID or key.
+      operationId: updateIssue
+      parameters:
+        - in: path
+          name: issueIdOrKey
+          required: true
+          schema:
+            type: string
+          description: The ID or key of the issue to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fields:
+                  type: string
+                  description: >
+                    A JSON-encoded string representing a map of the fields to update.
+                    Example: '{"summary": "Updated summary", "priority": "High"}'
+              required:
+                - fields
+      responses:
+        '204':
+          description: Issue updated successfully.
+        '400':
+          description: Bad Request – The data provided is invalid.
+        '401':
+          description: Unauthorized – Check your credentials.
+        '404':
+          description: Issue not found.
+
+  /rest/api/3/project:
+    get:
+      summary: List Projects
+      description: Retrieve a list of projects accessible to the authenticated user.
+      operationId: listProjects
+      responses:
+        '200':
+          description: A list of projects.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    key:
+                      type: string
+                    name:
+                      type: string
+        '401':
+          description: Unauthorized – Check your credentials.
