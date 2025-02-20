@@ -1,0 +1,12 @@
+Descriptor:
+  Name: JiraSoftwareCopilot
+  DisplayName: Jira Software Copilot Plugin
+  Description: A copilot plugin to interact with Atlassian Jira Software Cloud, allowing you to retrieve issue details and list projects.
+  SupportedAuthTypes:
+    - Basic
+
+
+SkillGroups:
+  - Format: API
+    Settings:
+      OpenApiSpecUrl: https://gist.githubusercontent.com/KwachSean/479788fd67a4d1bb2c2350eeca7acbf7/raw/639afd8bce9b9f7d1432db0fb4f17d83c2efc4ba/Jira.yaml
